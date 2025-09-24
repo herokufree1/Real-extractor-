@@ -8,7 +8,7 @@ from pyromod import listen
 from pyrogram import Client
 from pyrogram import filters
 from pyrogram.types import Message
-from config import CHANNEL_ID
+from config import CHANNEL_ID,THUMB_URL
 from Extractor import app
 from Extractor.core.utils import forward_to_log
 
@@ -24,7 +24,7 @@ def download_thumbnail(url):
         response = requests.get(url)
         if response.status_code == 200:
             # Save in temp directory
-            thumb_path = ""
+            thumb_path = "thumb_temp.jpg"
             with open(thumb_path, "wb") as f:
                 f.write(response.content)
             return thumb_path
@@ -43,7 +43,7 @@ async def careerdl(app, message, headers, raw_text2, token, raw_text3, prog, nam
     start_time = time.time()
 
     # Download thumbnail at start
- 
+    thumb_path = download_thumbnail(THUMB_URL)
 
     for id_text in num_id:
         try:
