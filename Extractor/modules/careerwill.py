@@ -17,93 +17,6 @@ BCOV_POLICY = "BCpkADawqM1474MvKwYlMRZNBPoqkJY-UWm7zE1U769d5r5kqTjG0v8L-THXuVZtd
 bc_url = f"https://edge.api.brightcove.com/playback/v1/accounts/{ACCOUNT_ID}/videos/"
 bc_hdr = {"BCOV-POLICY": BCOV_POLICY}
 
-
-
-async def careerdl(app, message, headers, raw_text2, token, raw_text3, prog, name):
-    num_id = raw_text3.split('&')
-    fuck = ""
-
-    for x in range(len(num_id)):
-        id_text = num_id[x]
-
-        try:
-            # Video Details
-            details_url = f"https://elearn.crwilladmin.com/api/v8/batch-detail/{raw_text2}?topicId={id_text}"
-            response = requests.get(details_url, headers=headers)
-            data = response.json()
-
-            details_list = data["data"]["class_list"]
-            batch_class = details_list["classes"]
-            batch_class.reverse()
-
-            for video_data in batch_class:
-                vid_id = video_data['id']
-                lesson_name = video_data['lessonName']
-                lesson_ext = video_data['lessonExt']
-
-                if lesson_ext == 'brightcove':
-                    lesson_url = requests.get(
-                        f"https://elearn.crwilladmin.com/api/v8/class-detail/{vid_id}", 
-                        headers=headers
-                    ).json()['data']['class_detail']['lessonUrl']
-
-                    video_link = f"{bc_url}{lesson_url}/master.m3u8?bcov_auth={token}"
-                    fuck += f"{lesson_name}: {video_link}\n"
-                
-                elif lesson_ext == 'youtube':
-                    lesson_url = requests.get(
-                        f"https://elearn.crwilladmin.com/api/v8/class-detail/{vid_id}", 
-                        headers=headers
-                    ).json()['data']['class_detail']['lessonUrl']
-                    
-                    video_link = f"https://www.youtube.com/embed/{lesson_url}"
-                    fuck += f"{lesson_name}: {video_link}\n"
-
-            # Notes Details
-            notes_url = f"https://elearn.crwilladmin.com/api/v8/batch-topic/{raw_text2}?type=notes"
-            notes_resp = requests.get(notes_url, headers=headers).json()
-
-            if 'data' in notes_resp and 'batch_topic' in notes_resp['data']:
-                notes_topics = notes_resp['data']['batch_topic']
-
-                for topic in notes_topics:
-                    topic_id = topic['id']
-                    notes_topic_url = f"https://elearn.crwilladmin.com/api/v8/batch-notes/{raw_text2}?topicId={topic_id}"
-                    notes_topic_resp = requests.get(notes_topic_url, headers=headers).json()
-
-                    if 'data' in notes_topic_resp and 'notesDetails' in notes_topic_resp['data']:
-                        notes_details = notes_topic_resp['data']['notesDetails']
-
-                        for note_detail in reversed(notes_details):
-                            doc_title = note_detail.get('docTitle', '')
-                            doc_url = note_detail.get('docUrl', '').replace(' ', '%20')
-                            
-                            if f"{doc_title}: {doc_url}\n" not in fuck:
-                                fuck += f"{doc_title}: {doc_url}\n"
-
-        except Exception as e:
-            print(f"Error processing topic ID {id_text}: {e}")
-            
-    if '/' in name:
-        name = name.replace("/", "")
-    
-    file_name = f"{name}.txt"
-    with open(file_name, 'w') as f:
-        f.write(fuck)
-
-  
-    
-    c_txt = f"**App Name: CareerWill \n Batch Name: `{name}'"
-    await app.send_document(
-        chat_id=message.chat.id, 
-        document=file_name, 
-        caption=c_txt
-    )
-    await app.send_document(log_channel, document=file_name, caption=c_txt)
-    await prog.delete()
-    os.remove(f"{file_name}")
-
-
 @app.on_message(filters.command(["cw"]))
 async def career_will(app, message):
     try:
@@ -201,4 +114,88 @@ async def career_will(app, message):
         await message.reply_text(str(e))
 
 
+async def careerdl(app, message, headers, raw_text2, token, raw_text3, prog, name):
+    num_id = raw_text3.split('&')
+    fuck = ""
+
+    for x in range(len(num_id)):
+        id_text = num_id[x]
+
+        try:
+            # Video Details
+            details_url = f"https://elearn.crwilladmin.com/api/v8/batch-detail/{raw_text2}?topicId={id_text}"
+            response = requests.get(details_url, headers=headers)
+            data = response.json()
+
+            details_list = data["data"]["class_list"]
+            batch_class = details_list["classes"]
+            batch_class.reverse()
+
+            for video_data in batch_class:
+                vid_id = video_data['id']
+                lesson_name = video_data['lessonName']
+                lesson_ext = video_data['lessonExt']
+
+                if lesson_ext == 'brightcove':
+                    lesson_url = requests.get(
+                        f"https://elearn.crwilladmin.com/api/v8/class-detail/{vid_id}", 
+                        headers=headers
+                    ).json()['data']['class_detail']['lessonUrl']
+
+                    video_link = f"{bc_url}{lesson_url}/master.m3u8?bcov_auth={token}"
+                    fuck += f"{lesson_name}: {video_link}\n"
+                
+                elif lesson_ext == 'youtube':
+                    lesson_url = requests.get(
+                        f"https://elearn.crwilladmin.com/api/v8/class-detail/{vid_id}", 
+                        headers=headers
+                    ).json()['data']['class_detail']['lessonUrl']
+                    
+                    video_link = f"https://www.youtube.com/embed/{lesson_url}"
+                    fuck += f"{lesson_name}: {video_link}\n"
+
+            # Notes Details
+            notes_url = f"https://elearn.crwilladmin.com/api/v8/batch-topic/{raw_text2}?type=notes"
+            notes_resp = requests.get(notes_url, headers=headers).json()
+
+            if 'data' in notes_resp and 'batch_topic' in notes_resp['data']:
+                notes_topics = notes_resp['data']['batch_topic']
+
+                for topic in notes_topics:
+                    topic_id = topic['id']
+                    notes_topic_url = f"https://elearn.crwilladmin.com/api/v8/batch-notes/{raw_text2}?topicId={topic_id}"
+                    notes_topic_resp = requests.get(notes_topic_url, headers=headers).json()
+
+                    if 'data' in notes_topic_resp and 'notesDetails' in notes_topic_resp['data']:
+                        notes_details = notes_topic_resp['data']['notesDetails']
+
+                        for note_detail in reversed(notes_details):
+                            doc_title = note_detail.get('docTitle', '')
+                            doc_url = note_detail.get('docUrl', '').replace(' ', '%20')
+                            
+                            if f"{doc_title}: {doc_url}\n" not in fuck:
+                                fuck += f"{doc_title}: {doc_url}\n"
+
+        except Exception as e:
+            print(f"Error processing topic ID {id_text}: {e}")
+            
+    if '/' in name:
+        name = name.replace("/", "")
     
+    file_name = f"{name}.txt"
+    with open(file_name, 'w') as f:
+        f.write(fuck)
+
+  
+    
+    c_txt = f"**App Name: CareerWill \n Batch Name: `{name}'"
+    await app.send_document(
+        chat_id=message.chat.id, 
+        document=file_name, 
+        caption=c_txt
+    )
+    await app.send_document(log_channel, document=file_name, caption=c_txt)
+    await prog.delete()
+    os.remove(f"{file_name}")
+
+
