@@ -34,6 +34,7 @@ BOT_USERNAME = os.environ.get("Anjanextractorbot")
 OWNER_ID = int(os.environ.get("OWNER_ID", "2073438175"))
 # ------------------X------------------------------
 
+THUMB_URL = os.environ.get("THUMB_URL", "https://files.catbox.moe/ao5o4z.jpg")
 SUDO_USERS = list(map(int, getenv("SUDO_USERS", "2073438175").split()))
 # ------------------------------------------------
 CHANNEL_ID = int(os.environ.get("CHANNEL_ID", "-1002960280792"))
