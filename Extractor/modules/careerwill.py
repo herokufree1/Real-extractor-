@@ -9,7 +9,7 @@ from config import CHANNEL_ID
 log_channel = CHANNEL_ID
 
 
-
+@app.on_message(filters.command(["cw"]) & filters.user(SUDO_USERS))
 async def career_willl(app, message):
     try:
         input1 = await app.ask(message.chat.id, "Send ID*Password or Token")
