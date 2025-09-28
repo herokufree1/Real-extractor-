@@ -1,13 +1,9 @@
-import os
-import requests
-import threading
-import asyncio
-import cloudscraper
+import os, requests, asyncio, cloudscraper
 from pyrogram import filters
 from Extractor import app
-from config import CHANNEL_ID
-log_channel = CHANNEL_ID
+from config import SUDO_USERS
 
+requests = cloudscraper.create_scraper()
 
 @app.on_message(filters.command(["cw"]) & filters.user(SUDO_USERS))
 async def career_willl(app, message):
