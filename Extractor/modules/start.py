@@ -12,7 +12,7 @@ from Extractor.modules.appex_v3 import appex_v3_txt
 from Extractor.modules.khan import khan_login
 from Extractor.modules.kdlive import kdlive
 from Extractor.modules.pw import  pw_login
-from Extractor.modules.careerwill import career_will
+#from Extractor.modules.careerwill import career_will
 from Extractor.modules.getappxotp import send_otp
 from Extractor.modules.findapi import findapis_extract
 from Extractor.modules.utk import handle_utk_logic
