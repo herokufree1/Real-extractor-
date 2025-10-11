@@ -39,7 +39,7 @@ SUDO_USERS = list(map(int, getenv("SUDO_USERS", "7962530240").split()))
 # ------------------------------------------------
 CHANNEL_ID = int(os.environ.get("CHANNEL_ID", "-1002969140468"))
 # ------------------------------------------------
-MONGO_URL = os.environ.get("MONGO_URL", "mongodb+srv://mongodburl9721:rfNOuo4c1OSTZ7cs@cluster0.edezeww.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
+MONGO_URL = os.environ.get("MONGO_URL", "mongodb+srv://mongodburl9721:rfNOuo4c1OSTZ7cs@cluster0.edezeww.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
 # -----------------------------------------------
 FORCE_SUB = int(os.environ.get("FORCE_SUB", "-1002975852492"))
 TXT_LOG = int(getenv("TXT_LOG", "-1002975852492"))
